@@ -85,6 +85,7 @@ import org.jboss.aesh.console.settings.FileAccessPermission;
 import org.jboss.aesh.console.settings.Settings;
 import org.jboss.aesh.console.settings.SettingsBuilder;
 import org.jboss.aesh.edit.actions.Action;
+import org.jboss.aesh.terminal.Terminal;
 import org.jboss.as.cli.Attachments;
 import org.jboss.as.cli.CliConfig;
 import org.jboss.as.cli.CliEvent;
@@ -1714,7 +1715,15 @@ class CommandContextImpl implements CommandContext, ModelControllerClientFactory
     @Override
     public int getTerminalWidth() {
         if( !INTERACT ){
-            return 0;
+            // WFCORE-2812, return the terminal width where it launches the non interactive mode
+            Terminal terminal = new SettingsBuilder().create().getTerminal();
+            int terminalWidth = terminal.getWidth();
+            try {
+                terminal.reset();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return terminalWidth;
         }
 
         if(console == null) {
@@ -1730,8 +1739,17 @@ class CommandContextImpl implements CommandContext, ModelControllerClientFactory
 
     @Override
     public int getTerminalHeight() {
-        if( !INTERACT ){
-            return 0;
+        if (!INTERACT) {
+            // WFCORE-2812, return the terminal height where it launches the non interactive mode
+            Terminal terminal = new SettingsBuilder().create().getTerminal();
+            int terminalHeight = terminal.getHeight();
+            try {
+                terminal.reset();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return terminalHeight;
         }
 
         if(console == null) {
