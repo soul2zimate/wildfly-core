@@ -167,7 +167,7 @@ class AuthenticationFactoryDefinitions {
             .setFlags(AttributeAccess.Flag.RESTART_RESOURCE_SERVICES)
             .build();
 
-    static AttributeDefinition getMechanismConfiguration(String forCapability) {
+    static ObjectListAttributeDefinition getMechanismConfiguration(String forCapability) {
         SimpleAttributeDefinition preRealmPrincipalTransformerAttribute = new SimpleAttributeDefinitionBuilder(BASE_PRE_REALM_PRINCIPAL_TRANSFORMER)
                 .setCapabilityReference(PRINCIPAL_TRANSFORMER_CAPABILITY, forCapability, true)
                 .build();
@@ -369,7 +369,9 @@ class AuthenticationFactoryDefinitions {
                 .setRestartAllServices()
                 .build();
 
-        AttributeDefinition mechanismConfigurationAttribute = getMechanismConfiguration(HTTP_AUTHENTICATION_FACTORY_CAPABILITY);
+        ObjectListAttributeDefinition mechanismConfigurationAttribute = new ObjectListAttributeDefinition.Builder(getMechanismConfiguration(HTTP_AUTHENTICATION_FACTORY_CAPABILITY))
+                .setRequired(true)
+                .build();
 
         AttributeDefinition[] attributes = new AttributeDefinition[] { securityDomainAttribute, HTTP_SERVER_MECHANISM_FACTORY, mechanismConfigurationAttribute };
         AbstractAddStepHandler add = new TrivialAddHandler<HttpAuthenticationFactory>(HttpAuthenticationFactory.class, attributes, HTTP_AUTHENTICATION_FACTORY_RUNTIME_CAPABILITY) {
@@ -453,7 +455,7 @@ class AuthenticationFactoryDefinitions {
                 .setRestartAllServices()
                 .build();
 
-        AttributeDefinition mechanismConfigurationAttribute = getMechanismConfiguration(SASL_AUTHENTICATION_FACTORY_CAPABILITY);
+        ObjectListAttributeDefinition mechanismConfigurationAttribute = getMechanismConfiguration(SASL_AUTHENTICATION_FACTORY_CAPABILITY);
 
         AttributeDefinition[] attributes = new AttributeDefinition[] { securityDomainAttribute, SASL_SERVER_FACTORY, mechanismConfigurationAttribute };
 

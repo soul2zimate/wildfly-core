@@ -241,6 +241,14 @@ public class ObjectListAttributeDefinition extends ListAttributeDefinition {
             setAttributeMarshaller(AttributeMarshaller.OBJECT_LIST_MARSHALLER);
         }
 
+        public Builder(ObjectListAttributeDefinition basis) {
+            super(basis);
+            this.valueType = basis.getValueType();
+            setElementValidator(valueType.getValidator());
+            setAttributeParser(AttributeParser.OBJECT_LIST_PARSER);
+            setAttributeMarshaller(AttributeMarshaller.OBJECT_LIST_MARSHALLER);
+        }
+
         public static Builder of(final String name, final ObjectTypeAttributeDefinition valueType) {
             return new Builder(name, valueType);
         }
