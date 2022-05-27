@@ -242,7 +242,7 @@ fi
 
 # If the -Djava.security.manager is found, enable the -secmgr and include a bogus security manager for JBoss Modules to replace
 # Note that HOST_CONTROLLER_JAVA_OPTS will not need to be handled here
-SECURITY_MANAGER_SET=`echo $PROCESS_CONTROLLER_JAVA_OPTS | $GREP "java\.security\.manager"`
+SECURITY_MANAGER_SET=`echo $PROCESS_CONTROLLER_JAVA_OPTS | $GREP "java\.security\.manager\s\|java\.security\.manager$"`
 if [ "x$SECURITY_MANAGER_SET" != "x" ]; then
     echo "ERROR: The use of -Djava.security.manager has been removed. Please use the -secmgr command line argument or SECMGR=true environment variable."
     exit 1

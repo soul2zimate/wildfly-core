@@ -105,7 +105,7 @@ call "!DIRNAME!common.bat" :setDefaultModularJvmOptions "!HOST_CONTROLLER_JAVA_O
 set "HOST_CONTROLLER_JAVA_OPTS=!HOST_CONTROLLER_JAVA_OPTS! !DEFAULT_MODULAR_JVM_OPTIONS!"
 
 rem If the -Djava.security.manager is found, enable the -secmgr and include a bogus security manager for JBoss Modules to replace
-echo(!PROCESS_CONTROLLER_JAVA_OPTS! | findstr /r /c:"-Djava.security.manager" > nul && (
+echo(!PROCESS_CONTROLLER_JAVA_OPTS! | findstr /r /c:"-Djava.security.manager[^=]" > nul && (
     echo "ERROR: Support for using -Djava.security.manager has been removed. Please use -secmgr or set the environment variable SECMGR=true"
     GOTO :EOF
 )

@@ -232,6 +232,12 @@ if $cygwin; then
     JBOSS_CONFIG_DIR=`cygpath --path --windows "$JBOSS_CONFIG_DIR"`
 fi
 
+# Process the JAVA_OPTS and fail the script of a java.security.manager was found
+SECURITY_MANAGER_SET=`echo $JAVA_OPTS | $GREP "java\.security\.manager\s\|java\.security\.manager$"`
+if [ "x$SECURITY_MANAGER_SET" != "x" ]; then
+    echo "ERROR: The use of -Djava.security.manager has been removed. Please use the -secmgr command line argument or SECMGR=true environment variable."
+    exit 1
+fi
 
 
 if [ "$PRESERVE_JAVA_OPTS" != "true" ]; then
@@ -303,16 +309,6 @@ if [ "$PRESERVE_JAVA_OPTS" != "true" ]; then
     JAVA_OPTS="$JAVA_OPTS $SECURITY_MANAGER_CONFIG_OPTION"
 
     JAVA_OPTS="$PREPEND_JAVA_OPTS $JAVA_OPTS"
-fi
-
-# Process the JAVA_OPTS and fail the script of a java.security.manager was found
-SECURITY_MANAGER_SET=`echo $JAVA_OPTS | $GREP "java\.security\.manager"`
-if [ "x$SECURITY_MANAGER_SET" != "x" ]; then
-    SECURITY_MANAGER_SET_TO_ALLOW=`echo $JAVA_OPTS | $GREP "java\.security\.manager=allow"`
-    if [ "x$SECURITY_MANAGER_SET_TO_ALLOW" = "x" ]; then
-        echo "ERROR: The use of -Djava.security.manager has been removed. Please use the -secmgr command line argument or SECMGR=true environment variable."
-        exit 1
-    fi
 fi
 
 # Set up the module arguments
